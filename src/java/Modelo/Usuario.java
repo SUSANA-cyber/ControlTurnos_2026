@@ -1,38 +1,31 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Modelo;
 
-/**
- *
- * @author Acer
- */
-public class ModeloUsuario {
-    
-     private int id;
+public class Usuario {
+
+    private int id_usuario;
     private String dpi;
-    private String nombre ;
+    private String nombre;
     private String usuario;
     private String area;
+    private String puesto;
+    private int turno_actual_id;
+    private String turno;
     private String correo;
     private String password;
     private String estado;
-    private String modo_inactivo;
-    private String puesto;
-    private String turno; 
+    private Integer motivo_inactivo_id;
+    private int rol_id;
     private String rol;
-    
-   public ModeloUsuario(){
-   }   
 
-    public int getId() {
-        return id;
+    public Usuario() {
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public int getId_usuario() {
+        return id_usuario;
+    }
+
+    public void setId_usuario(int id_usuario) {
+        this.id_usuario = id_usuario;
     }
 
     public String getDpi() {
@@ -67,6 +60,30 @@ public class ModeloUsuario {
         this.area = area;
     }
 
+    public String getPuesto() {
+        return puesto;
+    }
+
+    public void setPuesto(String puesto) {
+        this.puesto = puesto;
+    }
+
+    public int getTurno_actual_id() {
+        return turno_actual_id;
+    }
+
+    public void setTurno_actual_id(int turno_actual_id) {
+        this.turno_actual_id = turno_actual_id;
+    }
+
+    public String getTurno() {
+        return turno;
+    }
+
+    public void setTurno(String turno) {
+        this.turno = turno;
+    }
+
     public String getCorreo() {
         return correo;
     }
@@ -91,28 +108,20 @@ public class ModeloUsuario {
         this.estado = estado;
     }
 
-    public String getModo_inactivo() {
-        return modo_inactivo;
+    public Integer getMotivo_inactivo_id() {
+        return motivo_inactivo_id;
     }
 
-    public void setModo_inactivo(String modo_inactivo) {
-        this.modo_inactivo = modo_inactivo;
+    public void setMotivo_inactivo_id(Integer motivo_inactivo_id) {
+        this.motivo_inactivo_id = motivo_inactivo_id;
     }
 
-    public String getPuesto() {
-        return puesto;
+    public int getRol_id() {
+        return rol_id;
     }
 
-    public void setPuesto(String puesto) {
-        this.puesto = puesto;
-    }
-
-    public String getTurno() {
-        return turno;
-    }
-
-    public void setTurno(String turno) {
-        this.turno = turno;
+    public void setRol_id(int rol_id) {
+        this.rol_id = rol_id;
     }
 
     public String getRol() {
@@ -122,6 +131,5 @@ public class ModeloUsuario {
     public void setRol(String rol) {
         this.rol = rol;
     }
-    
-    
 }
+

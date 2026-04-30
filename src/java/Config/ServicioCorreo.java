@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package conexion;
+package Config;
 
 /**
  *
@@ -25,7 +25,7 @@ public class ServicioCorreo {
     public static void enviarEmail(String destinatario, String asunto, String cuerpo) {
        
         final String correoAdmin = "juiopacp@gmail.com";
-        final String passwordApp = "gtlz piys xgei azju"; 
+        final String passwordApp = "gtlz piys xgei azju".replace(" ", "");
 
        
         Properties props = new Properties();
@@ -33,6 +33,8 @@ public class ServicioCorreo {
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.connectiontimeout", "10000");
+        props.put("mail.smtp.timeout", "10000");
 
         Session session = Session.getInstance(props,
           new javax.mail.Authenticator() {
@@ -53,7 +55,8 @@ public class ServicioCorreo {
 
         } catch (MessagingException e) {
             System.out.println("Error al enviar el correo: " + e.getMessage());
-            throw new RuntimeException(e);
+            System.out.println("La operacion continua aunque el correo no se haya enviado.");
         }
     }
 }
+

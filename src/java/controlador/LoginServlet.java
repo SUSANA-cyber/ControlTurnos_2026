@@ -1,27 +1,19 @@
 package controlador;
 
-
-
-import conexion.Conexion;
+import Modelo.Usuario;
+import ModeloDAO.BitacoraDAO;
+import ModeloDAO.LoginDAO;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
 
-    /**
-     *
-     * @param req
-     * @param res
-     * @throws ServletException
-     * @throws IOException
-     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
@@ -29,66 +21,39 @@ public class LoginServlet extends HttpServlet {
         String usuario = req.getParameter("usuario");
         String password = req.getParameter("password");
 
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
+        if (usuario != null) {
+            usuario = usuario.trim();
+        }
+        if (password != null) {
+            password = password.trim();
+        }
 
-  try {
-            con = Conexion.getConexion();
+        try {
+            LoginDAO dao = new LoginDAO();
+            Usuario u = dao.validarUsuario(usuario);
 
+            if (u != null && u.getPassword() != null && u.getPassword().trim().equals(password)) {
+                HttpSession sesion = req.getSession();
+                sesion.setAttribute("id_usuario", u.getId_usuario());
+                sesion.setAttribute("usuario", u.getUsuario());
+                sesion.setAttribute("rol", u.getRol());
 
-            String sql = "SELECT u.id, u.password, r.nombre AS rol " +
-                         "FROM usuarios u " +
-                         "INNER JOIN roles r ON u.rol_id = r.id " +
-                         "WHERE u.usuario=? AND u.estado='Activo'";
+                BitacoraDAO.registrar(u.getId_usuario(), "Login", "Inicio de sesion",
+                        "El usuario inicio sesion correctamente");
 
-            ps = con.prepareStatement(sql);
-            ps.setString(1, usuario);
+                res.sendRedirect("Vistas/dashboard.jsp");
+                return;
+            }
 
-            rs = ps.executeQuery();
-
-            if (rs.next()) {
-                int idCapturado = rs.getInt("id");
-                String passBD = rs.getString("password");
-                String rol = rs.getString("rol");
-
-                
-
-                int idUsuario = rs.getInt("id");
-
-
-                if (passBD.equals(password)) {
-
-                    HttpSession sesion = req.getSession();
-                    sesion.setAttribute("id_usuario", idCapturado);
-                    sesion.setAttribute("usuario", usuario);
-                    sesion.setAttribute("rol", rol);
-                    
-
-                    res.sendRedirect("dashboard.jsp");
-
-                } 
-
-            } else {
-                res.sendRedirect("login.jsp?error=1");
-            } 
-
-            rs.close();
-            ps.close();
-            con.close();
+            BitacoraDAO.registrar(null, "Login", "Credenciales incorrectas",
+                    "Intento fallido para el usuario: " + usuario);
+            res.sendRedirect("Vistas/login.jsp?error=1");
 
         } catch (Exception e) {
             e.printStackTrace();
-            res.sendRedirect("login.jsp?error=2");
-
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (con != null) con.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            res.sendRedirect("Vistas/login.jsp?error=2");
         }
     }
 }
+
+

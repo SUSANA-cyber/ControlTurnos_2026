@@ -1,6 +1,7 @@
 package controlador;
 
-import conexion.Conexion;
+import Config.Conexion;
+import ModeloDAO.BitacoraDAO;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -43,7 +44,11 @@ public class ActualizarTurnoServlet extends HttpServlet {
 
             ps.executeUpdate();
 
-            res.sendRedirect(req.getContextPath() + "/turnos.jsp");
+            BitacoraDAO.registrar((Integer) req.getSession().getAttribute("id_usuario"),
+                    "Asignacion de Turnos", "Actualizar",
+                    "Actualizacion de asignacion de turno ID " + id);
+
+            res.sendRedirect(req.getContextPath() + "/Vistas/turnos.jsp");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -57,3 +62,5 @@ public class ActualizarTurnoServlet extends HttpServlet {
         }
     }
 }
+
+

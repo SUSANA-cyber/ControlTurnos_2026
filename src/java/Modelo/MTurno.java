@@ -1,22 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Modelo;
 
-/**
- *
- * @author Acer
- */
 public class MTurno {
-   private int id;
-   private int id_usuario;
-   private String fecha_inico;
-   private String TurnoInicial;
-   private String NuevoTurno;
-   private String Nuevafecha;
-   private String Motivo;
+
+    private int id;
+    private int id_usuario;
+    private String fecha_inicio;
+    private String turnoInicial;
+    private String nuevoTurno;
+    private String nuevaFecha;
+    private String motivo;
+
+    public MTurno() {
+    }
 
     public int getId() {
         return id;
@@ -34,46 +29,44 @@ public class MTurno {
         this.id_usuario = id_usuario;
     }
 
-    public String getFecha_inico() {
-        return fecha_inico;
+    public String getFecha_inicio() {
+        return fecha_inicio;
     }
 
-    public void setFecha_inico(String fecha_inico) {
-        this.fecha_inico = fecha_inico;
+    public void setFecha_inicio(String fecha_inicio) {
+        this.fecha_inicio = fecha_inicio;
     }
 
     public String getTurnoInicial() {
-        return TurnoInicial;
+        return turnoInicial;
     }
 
-    public void setTurnoInicial(String TurnoInicial) {
-        this.TurnoInicial = TurnoInicial;
+    public void setTurnoInicial(String turnoInicial) {
+        this.turnoInicial = turnoInicial;
     }
 
     public String getNuevoTurno() {
-        return NuevoTurno;
+        return nuevoTurno;
     }
 
-    public void setNuevoTurno(String NuevoTurno) {
-        this.NuevoTurno = NuevoTurno;
+    public void setNuevoTurno(String nuevoTurno) {
+        this.nuevoTurno = nuevoTurno;
     }
 
-    public String getNuevafecha() {
-        return Nuevafecha;
+    public String getNuevaFecha() {
+        return nuevaFecha;
     }
 
-    public void setNuevafecha(String Nuevafecha) {
-        this.Nuevafecha = Nuevafecha;
+    public void setNuevaFecha(String nuevaFecha) {
+        this.nuevaFecha = nuevaFecha;
     }
 
     public String getMotivo() {
-        return Motivo;
+        return motivo;
     }
 
-    public void setMotivo(String Motivo) {
-        this.Motivo = Motivo;
+    public void setMotivo(String motivo) {
+        this.motivo = motivo;
     }
-     
-    
-    
 }
+

@@ -40,9 +40,9 @@ button {
 
 <body>
 
-<h2>Marcaje de Asistencia</h2>
+<h2>MARCAJE</h2>
 
-<!-- ⏱ RELOJ -->
+<!-- â± RELOJ -->
 <div class="reloj" id="reloj"></div>
 
 <%
@@ -54,7 +54,7 @@ if(msg != null){
 }
 %>
 
-<form action="MarcajeServlet" method="post">
+<form action="<%= request.getContextPath() %>/MarcajeServlet" method="post">
 
     <button name="accion" value="entrada">Entrada</button>
     <button name="accion" value="descanso1">Descanso 1</button>
@@ -66,7 +66,7 @@ if(msg != null){
 <br>
 <a href="dashboard.jsp">Regresar</a>
 
-<!-- ⏱ SCRIPT RELOJ -->
+<!-- â± SCRIPT RELOJ -->
 <script>
 function actualizarReloj() {
     const ahora = new Date();
@@ -84,3 +84,4 @@ actualizarReloj();
 
 </body>
 </html>
+

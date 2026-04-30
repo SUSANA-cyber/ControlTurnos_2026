@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="java.sql.*" %>
-<%@ page import="conexion.Conexion" %>
+<%@ page import="Config.Conexion" %>
 
 <%
     int id = Integer.parseInt(request.getParameter("id"));
@@ -19,7 +19,7 @@
 
 <h2>Editar Turno</h2>
 
-<form action="ActualizarTurnoServlet" method="post">
+<form action="<%= request.getContextPath() %>/ActualizarTurnoServlet" method="post">
 
     <input type="hidden" name="id" value="<%=id%>">
 
@@ -69,3 +69,4 @@
     ps2.close();
     con.close();
 %>
+
