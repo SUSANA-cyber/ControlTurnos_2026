@@ -139,7 +139,14 @@ ResultSet rsAdmins = null;
 
         <form action="<%= request.getContextPath() %>/UsuarioServlet" method="post">
             <label>No. DPI empleado</label>
-            <input type="text" name="dpi" required>
+            <input type="text"
+                   name="dpi"
+                   id="dpi"
+                   required
+                   inputmode="numeric"
+                   pattern="[0-9]+"
+                   title="El DPI solo debe contener números"
+                   oninput="this.value = this.value.replace(/[^0-9]/g, '')">
 
             <label>Nombre Completo</label>
             <input type="text" name="nombre" required>
@@ -148,7 +155,7 @@ ResultSet rsAdmins = null;
             <input type="text" name="usuario" required>
 
             <label>Área</label>
-            <select name="area_id" required>
+            <select name="area_id" id="area_id" required onchange="filtrarAdministradores()">
                 <option value="">Seleccione un área</option>
                 <%
                 for (String[] area : areas) {
@@ -159,29 +166,30 @@ ResultSet rsAdmins = null;
                 %>
             </select>
 
-            <input type="hidden" name="area_texto" value="Catalogo">
+            <input type="hidden" name="area_texto" id="area_texto">
 
             <label>Puesto</label>
             <input type="text" name="puesto">
 
             <label>Administrador responsable</label>
-            <select name="admin_responsable_id">
+            <select name="admin_responsable_id" id="admin_responsable_id">
                 <option value="">Seleccione un administrador</option>
                 <%
                 try {
                     conAdmins = Conexion.getConexion();
                     psAdmins = conAdmins.prepareStatement(
-                        "SELECT u.id, u.nombre, COALESCE(a.nombre, u.area) AS area_nombre " +
+                        "SELECT u.id, u.nombre, u.area_id, COALESCE(a.nombre, u.area) AS area_nombre " +
                         "FROM usuarios u " +
                         "LEFT JOIN areas a ON u.area_id = a.id " +
                         "WHERE u.rol_id = 2 AND u.estado = 'Activo' " +
-                        "ORDER BY u.nombre"
+                        "ORDER BY a.nombre, u.nombre"
                     );
                     rsAdmins = psAdmins.executeQuery();
 
                     while (rsAdmins.next()) {
                 %>
-                    <option value="<%= rsAdmins.getInt("id") %>">
+                    <option value="<%= rsAdmins.getInt("id") %>"
+                            data-area-id="<%= rsAdmins.getInt("area_id") %>">
                         <%= rsAdmins.getString("nombre") %> - <%= rsAdmins.getString("area_nombre") %>
                     </option>
                 <%
@@ -260,7 +268,34 @@ function toggleMotivo() {
     }
 }
 
+function filtrarAdministradores() {
+    var areaSelect = document.getElementById("area_id");
+    var adminSelect = document.getElementById("admin_responsable_id");
+    var areaTexto = document.getElementById("area_texto");
+    var areaId = areaSelect.value;
+
+    areaTexto.value = areaSelect.options[areaSelect.selectedIndex].text;
+
+    adminSelect.value = "";
+
+    for (var i = 0; i < adminSelect.options.length; i++) {
+        var option = adminSelect.options[i];
+
+        if (option.value === "") {
+            option.hidden = false;
+            option.disabled = false;
+        } else if (option.getAttribute("data-area-id") === areaId) {
+            option.hidden = false;
+            option.disabled = false;
+        } else {
+            option.hidden = true;
+            option.disabled = true;
+        }
+    }
+}
+
 toggleMotivo();
+filtrarAdministradores();
 </script>
 
 </body>

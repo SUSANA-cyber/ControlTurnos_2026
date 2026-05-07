@@ -33,6 +33,12 @@ public class UsuarioServlet extends HttpServlet {
             return;
         }
 
+        String dpi = req.getParameter("dpi");
+        if (dpi == null || !dpi.matches("[0-9]+")) {
+            res.sendRedirect("Vistas/usuarios.jsp?error=1");
+            return;
+        }
+
         String estado = req.getParameter("estado");
         Integer motivoInactivoId = parseEnteroObjeto(req.getParameter("motivo_inactivo_id"));
 
@@ -41,7 +47,7 @@ public class UsuarioServlet extends HttpServlet {
         }
 
         Usuario u = new Usuario();
-        u.setDpi(req.getParameter("dpi"));
+        u.setDpi(dpi);
         u.setNombre(req.getParameter("nombre"));
         u.setUsuario(req.getParameter("usuario"));
         u.setArea_id(parseEnteroObjeto(req.getParameter("area_id")));
