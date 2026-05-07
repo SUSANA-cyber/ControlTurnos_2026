@@ -130,14 +130,12 @@ th{
 
 <%
 ps = con.prepareStatement(
-    "SELECT DISTINCT u.id, u.nombre, u.puesto, COALESCE(a.nombre, u.area) AS area_nombre " +
+    "SELECT u.id, u.nombre, u.puesto, COALESCE(a.nombre, u.area) AS area_nombre " +
     "FROM usuarios u " +
     "LEFT JOIN areas a ON u.area_id = a.id " +
-    "INNER JOIN administradores_area aa ON aa.area_id = u.area_id " +
     "WHERE u.estado='Activo' " +
     "AND u.rol_id = 3 " +
-    "AND aa.usuario_admin_id = ? " +
-    "AND aa.estado = 'Activo' " +
+    "AND u.admin_responsable_id = ? " +
     "ORDER BY u.nombre"
 );
 ps.setInt(1, adminId.intValue());
@@ -186,37 +184,29 @@ while(rsTurnos.next()){
 
 </form>
 
-<%
-if(request.getParameter("ok") != null){
-%>
+<% if(request.getParameter("ok") != null){ %>
 <p class="msg-ok">Asignacion creada con exito</p>
-<%
-}
+<% } %>
 
-if("1".equals(request.getParameter("error"))){
-%>
+<% if("1".equals(request.getParameter("error"))){ %>
 <p class="msg-error">La fecha de inicio no puede ser mayor a la fecha fin</p>
-<%
-}
+<% } %>
 
-if("asignado".equals(request.getParameter("error"))){
-%>
+<% if("asignado".equals(request.getParameter("error"))){ %>
 <p class="msg-error">El empleado ya tiene un turno asignado en ese rango de fechas</p>
-<%
-}
+<% } %>
 
-if("horas".equals(request.getParameter("error"))){
-%>
+<% if("horas".equals(request.getParameter("error"))){ %>
 <p class="msg-error">Solo se pueden asignar turnos de 8 horas</p>
-<%
-}
+<% } %>
 
-if("2".equals(request.getParameter("error"))){
-%>
+<% if("noautorizado".equals(request.getParameter("error"))){ %>
+<p class="msg-error">No puedes gestionar ese empleado</p>
+<% } %>
+
+<% if("2".equals(request.getParameter("error"))){ %>
 <p class="msg-error">Ocurrio un error al guardar la asignacion</p>
-<%
-}
-%>
+<% } %>
 
 <a href="dashboard.jsp" class="btn-regresar">Regresar</a>
 
@@ -240,14 +230,13 @@ if("2".equals(request.getParameter("error"))){
 
 <%
 String sql2 =
-"SELECT DISTINCT at.id, u.nombre, COALESCE(ar.nombre, u.area) AS area_nombre, u.puesto, " +
+"SELECT at.id, u.nombre, COALESCE(ar.nombre, u.area) AS area_nombre, u.puesto, " +
 "at.fecha_inicio, at.fecha_fin, at.estado, tc.nombre AS turno " +
 "FROM asignacion_turnos at " +
 "INNER JOIN usuarios u ON at.usuario_id = u.id " +
 "INNER JOIN turnos_catalogo tc ON at.turno_id = tc.id " +
 "LEFT JOIN areas ar ON u.area_id = ar.id " +
-"INNER JOIN administradores_area aa ON aa.area_id = u.area_id " +
-"WHERE aa.usuario_admin_id = ? AND aa.estado = 'Activo' " +
+"WHERE u.admin_responsable_id = ? " +
 "ORDER BY at.fecha_inicio DESC";
 
 ps2 = con.prepareStatement(sql2);

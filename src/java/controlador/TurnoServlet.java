@@ -28,6 +28,8 @@ public class TurnoServlet extends HttpServlet {
         }
 
         String rol = (String) session.getAttribute("rol");
+        Integer adminId = (Integer) session.getAttribute("id_usuario");
+
         if (!"AdminArea".equals(rol)) {
             response.sendRedirect("Vistas/dashboard.jsp");
             return;
@@ -39,9 +41,11 @@ public class TurnoServlet extends HttpServlet {
         int turnoId = Integer.parseInt(request.getParameter("turno_id"));
 
         Connection con = null;
+        PreparedStatement psUsuario = null;
         PreparedStatement psVal = null;
         PreparedStatement psHoras = null;
         PreparedStatement psIns = null;
+        ResultSet rsUsuario = null;
         ResultSet rsVal = null;
         ResultSet rsHoras = null;
 
@@ -52,6 +56,19 @@ public class TurnoServlet extends HttpServlet {
             }
 
             con = Conexion.getConexion();
+
+            psUsuario = con.prepareStatement(
+                "SELECT id FROM usuarios " +
+                "WHERE id=? AND rol_id=3 AND estado='Activo' AND admin_responsable_id=?"
+            );
+            psUsuario.setInt(1, usuarioId);
+            psUsuario.setInt(2, adminId.intValue());
+            rsUsuario = psUsuario.executeQuery();
+
+            if (!rsUsuario.next()) {
+                response.sendRedirect("Vistas/turnos.jsp?error=noautorizado");
+                return;
+            }
 
             psHoras = con.prepareStatement("SELECT horas FROM turnos_catalogo WHERE id=?");
             psHoras.setInt(1, turnoId);
@@ -94,8 +111,10 @@ public class TurnoServlet extends HttpServlet {
             e.printStackTrace();
             response.sendRedirect("Vistas/turnos.jsp?error=2");
         } finally {
+            try { if (rsUsuario != null) rsUsuario.close(); } catch (Exception e) {}
             try { if (rsVal != null) rsVal.close(); } catch (Exception e) {}
             try { if (rsHoras != null) rsHoras.close(); } catch (Exception e) {}
+            try { if (psUsuario != null) psUsuario.close(); } catch (Exception e) {}
             try { if (psVal != null) psVal.close(); } catch (Exception e) {}
             try { if (psHoras != null) psHoras.close(); } catch (Exception e) {}
             try { if (psIns != null) psIns.close(); } catch (Exception e) {}

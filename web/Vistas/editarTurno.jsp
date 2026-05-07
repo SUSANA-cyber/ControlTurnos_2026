@@ -5,6 +5,7 @@
 <%
 String usuarioSesion = (String) session.getAttribute("usuario");
 String rolSesion = (String) session.getAttribute("rol");
+Integer adminId = (Integer) session.getAttribute("id_usuario");
 
 if (usuarioSesion == null) {
     response.sendRedirect("login.jsp");
@@ -30,8 +31,13 @@ String fechaFin = "";
 try {
     con = Conexion.getConexion();
 
-    ps = con.prepareStatement("SELECT * FROM asignacion_turnos WHERE id=?");
+    ps = con.prepareStatement(
+        "SELECT at.* FROM asignacion_turnos at " +
+        "JOIN usuarios u ON at.usuario_id = u.id " +
+        "WHERE at.id=? AND u.admin_responsable_id=?"
+    );
     ps.setInt(1, id);
+    ps.setInt(2, adminId.intValue());
     rs = ps.executeQuery();
 
     if (rs.next()) {
@@ -39,7 +45,7 @@ try {
         fechaInicio = rs.getString("fecha_inicio");
         fechaFin = rs.getString("fecha_fin");
     } else {
-        response.sendRedirect("turnos.jsp");
+        response.sendRedirect("turnos.jsp?error=noautorizado");
         return;
     }
 %>

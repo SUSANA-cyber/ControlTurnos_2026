@@ -117,19 +117,17 @@ try {
 
     if ("AdminArea".equals(rol)) {
         sqlTurnos =
-            "SELECT DISTINCT t.id, u.usuario, u.correo, t.Motivo, t.TurnoInicial, t.NuevoTurno " +
+            "SELECT t.id, u.usuario, u.correo, t.Motivo, t.TurnoInicial, t.NuevoTurno " +
             "FROM turnos t " +
             "JOIN usuarios u ON t.id_usuario = u.id " +
-            "JOIN administradores_area aa ON aa.area_id = u.area_id " +
-            "WHERE t.estado LIKE 'Pendiente%' " +
-            "AND aa.usuario_admin_id = ? " +
-            "AND aa.estado = 'Activo'";
+            "WHERE t.estado IN ('Pendiente', 'PendienteArea') " +
+            "AND u.admin_responsable_id = ?";
     } else {
         sqlTurnos =
             "SELECT t.id, u.usuario, u.correo, t.Motivo, t.TurnoInicial, t.NuevoTurno " +
             "FROM turnos t " +
             "JOIN usuarios u ON t.id_usuario = u.id " +
-            "WHERE t.estado LIKE 'Pendiente%'";
+            "WHERE t.estado = 'PendienteRRHH'";
     }
 
     PreparedStatement ps1 = con.prepareStatement(sqlTurnos);
@@ -169,19 +167,17 @@ Motivo: <%= rs1.getString("Motivo") %>
 
     if ("AdminArea".equals(rol)) {
         sqlSol =
-            "SELECT DISTINCT s.id, u.usuario, u.correo, s.tipo, s.motivo " +
+            "SELECT s.id, u.usuario, u.correo, s.tipo, s.motivo " +
             "FROM solicitudes s " +
             "JOIN usuarios u ON s.usuario_id = u.id " +
-            "JOIN administradores_area aa ON aa.area_id = u.area_id " +
-            "WHERE s.estado LIKE 'Pendiente%' " +
-            "AND aa.usuario_admin_id = ? " +
-            "AND aa.estado = 'Activo'";
+            "WHERE s.estado IN ('Pendiente', 'PendienteArea') " +
+            "AND u.admin_responsable_id = ?";
     } else {
         sqlSol =
             "SELECT s.id, u.usuario, u.correo, s.tipo, s.motivo " +
             "FROM solicitudes s " +
             "JOIN usuarios u ON s.usuario_id = u.id " +
-            "WHERE s.estado LIKE 'Pendiente%'";
+            "WHERE s.estado = 'PendienteRRHH'";
     }
 
     PreparedStatement ps2 = con.prepareStatement(sqlSol);

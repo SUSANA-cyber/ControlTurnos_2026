@@ -32,6 +32,7 @@ public class GestionAdminServlet extends HttpServlet {
         }
 
         String rol = (String) session.getAttribute("rol");
+        Integer adminId = (Integer) session.getAttribute("id_usuario");
 
         int idSolicitud = Integer.parseInt(request.getParameter("id_solicitud"));
         String correoEmpleado = request.getParameter("correo_empleado");
@@ -41,15 +42,27 @@ public class GestionAdminServlet extends HttpServlet {
         boolean exito = false;
 
         if ("AdminArea".equals(rol)) {
+            if (!solicitudPerteneceAlAdmin(idSolicitud, tipoTabla, adminId)) {
+                response.sendRedirect("Vistas/GstionSolicitudes.jsp?error=1");
+                return;
+            }
+
+            String nuevoEstado = "Aprobado".equalsIgnoreCase(decision) ? "PendienteRRHH" : "Rechazado";
+
             if ("turnos".equals(tipoTabla)) {
                 TurnoDAO tDao = new TurnoDAO();
-                exito = tDao.ActualizarEstado(idSolicitud, "PendienteRRHH");
+                exito = tDao.ActualizarEstado(idSolicitud, nuevoEstado);
             } else {
                 SolicitudDAO sDao = new SolicitudDAO();
-                exito = sDao.ActualizarEstado(idSolicitud, "PendienteRRHH");
+                exito = sDao.ActualizarEstado(idSolicitud, nuevoEstado);
             }
 
         } else if ("AdminRRHH".equals(rol)) {
+            if (!solicitudPendienteRRHH(idSolicitud, tipoTabla)) {
+                response.sendRedirect("Vistas/GstionSolicitudes.jsp?error=1");
+                return;
+            }
+
             if ("turnos".equals(tipoTabla)) {
                 TurnoDAO tDao = new TurnoDAO();
                 exito = tDao.ActualizarEstado(idSolicitud, decision);
@@ -87,6 +100,77 @@ public class GestionAdminServlet extends HttpServlet {
         }
     }
 
+    private boolean solicitudPerteneceAlAdmin(int idSolicitud, String tipoTabla, Integer adminId) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = Conexion.getConexion();
+
+            if ("turnos".equals(tipoTabla)) {
+                ps = con.prepareStatement(
+                    "SELECT t.id FROM turnos t " +
+                    "JOIN usuarios u ON t.id_usuario = u.id " +
+                    "WHERE t.id=? " +
+                    "AND t.estado IN ('Pendiente', 'PendienteArea') " +
+                    "AND u.admin_responsable_id=?"
+                );
+            } else {
+                ps = con.prepareStatement(
+                    "SELECT s.id FROM solicitudes s " +
+                    "JOIN usuarios u ON s.usuario_id = u.id " +
+                    "WHERE s.id=? " +
+                    "AND s.estado IN ('Pendiente', 'PendienteArea') " +
+                    "AND u.admin_responsable_id=?"
+                );
+            }
+
+            ps.setInt(1, idSolicitud);
+            ps.setInt(2, adminId.intValue());
+            rs = ps.executeQuery();
+
+            return rs.next();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try { if (rs != null) rs.close(); } catch (Exception e) {}
+            try { if (ps != null) ps.close(); } catch (Exception e) {}
+            try { if (con != null) con.close(); } catch (Exception e) {}
+        }
+    }
+
+    private boolean solicitudPendienteRRHH(int idSolicitud, String tipoTabla) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = Conexion.getConexion();
+
+            if ("turnos".equals(tipoTabla)) {
+                ps = con.prepareStatement("SELECT id FROM turnos WHERE id=? AND estado='PendienteRRHH'");
+            } else {
+                ps = con.prepareStatement("SELECT id FROM solicitudes WHERE id=? AND estado='PendienteRRHH'");
+            }
+
+            ps.setInt(1, idSolicitud);
+            rs = ps.executeQuery();
+
+            return rs.next();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try { if (rs != null) rs.close(); } catch (Exception e) {}
+            try { if (ps != null) ps.close(); } catch (Exception e) {}
+            try { if (con != null) con.close(); } catch (Exception e) {}
+        }
+    }
+
     private void aplicarCambioTurno(int idSolicitudTurno) {
         Connection con = null;
         PreparedStatement ps = null;
@@ -114,7 +198,11 @@ public class GestionAdminServlet extends HttpServlet {
                 if (rsTurnoId.next()) {
                     int turnoId = rsTurnoId.getInt("id");
 
-                    psInsert = con.prepareStatement("INSERT INTO asignacion_turnos (usuario_id, fecha_inicio, fecha_fin, turno_id, estado) VALUES (?, ?, ?, ?, 'Activo')");
+                    psInsert = con.prepareStatement(
+                        "INSERT INTO asignacion_turnos " +
+                        "(usuario_id, fecha_inicio, fecha_fin, turno_id, estado) " +
+                        "VALUES (?, ?, ?, ?, 'Activo')"
+                    );
                     psInsert.setInt(1, usuarioId);
                     psInsert.setString(2, nuevaFecha);
                     psInsert.setString(3, nuevaFecha);
