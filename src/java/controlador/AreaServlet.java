@@ -1,6 +1,6 @@
 package controlador;
 
-import ModeloDAO.UsuarioDAO;
+import ModeloDAO.AreaDAO;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebServlet("/RolServlet")
-public class RolServlet extends HttpServlet {
+@WebServlet("/AreaServlet")
+public class AreaServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
@@ -24,24 +24,21 @@ public class RolServlet extends HttpServlet {
             return;
         }
 
-        String rolSesion = (String) session.getAttribute("rol");
-        if (rolSesion == null || !rolSesion.equals("AdminRRHH")) {
+        String rol = (String) session.getAttribute("rol");
+        if (!"AdminRRHH".equals(rol)) {
             res.sendRedirect("Vistas/dashboard.jsp");
             return;
         }
 
-        String accion = req.getParameter("accion");
-        String usuario = req.getParameter("usuario");
-        UsuarioDAO dao = new UsuarioDAO();
-        boolean ok = false;
+        String nombre = req.getParameter("nombre_area");
 
-        if ("agregar".equals(accion)) {
-            int rolId = Integer.parseInt(req.getParameter("rol_id"));
-            ok = dao.asignarRol(usuario, rolId);
-        } else if ("eliminar".equals(accion)) {
-            ok = dao.quitarRol(usuario);
+        AreaDAO dao = new AreaDAO();
+        boolean ok = dao.agregarArea(nombre);
+
+        if (ok) {
+            res.sendRedirect("Vistas/usuarios.jsp?areaok=1");
+        } else {
+            res.sendRedirect("Vistas/usuarios.jsp?areaerror=1");
         }
-
-        res.sendRedirect("Vistas/gestionRoles.jsp?" + (ok ? "ok=1" : "error=1"));
     }
 }

@@ -7,6 +7,7 @@ public class Usuario {
     private String nombre;
     private String usuario;
     private String area;
+    private Integer area_id;
     private String puesto;
     private int turno_actual_id;
     private String turno;
@@ -16,9 +17,8 @@ public class Usuario {
     private Integer motivo_inactivo_id;
     private int rol_id;
     private String rol;
-
-    public Usuario() {
-    }
+    private Integer admin_responsable_id;
+    private String adminResponsableNombre;
 
     public int getId_usuario() {
         return id_usuario;
@@ -58,6 +58,14 @@ public class Usuario {
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public Integer getArea_id() {
+        return area_id;
+    }
+
+    public void setArea_id(Integer area_id) {
+        this.area_id = area_id;
     }
 
     public String getPuesto() {
@@ -131,5 +139,20 @@ public class Usuario {
     public void setRol(String rol) {
         this.rol = rol;
     }
-}
 
+    public Integer getAdmin_responsable_id() {
+        return admin_responsable_id;
+    }
+
+    public void setAdmin_responsable_id(Integer admin_responsable_id) {
+        this.admin_responsable_id = admin_responsable_id;
+    }
+
+    public String getAdminResponsableNombre() {
+        return adminResponsableNombre;
+    }
+
+    public void setAdminResponsableNombre(String adminResponsableNombre) {
+        this.adminResponsableNombre = adminResponsableNombre;
+    }
+}

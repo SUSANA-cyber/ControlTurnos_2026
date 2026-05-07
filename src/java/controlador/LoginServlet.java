@@ -1,7 +1,6 @@
 package controlador;
 
 import Modelo.Usuario;
-import ModeloDAO.BitacoraDAO;
 import ModeloDAO.LoginDAO;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -21,12 +20,8 @@ public class LoginServlet extends HttpServlet {
         String usuario = req.getParameter("usuario");
         String password = req.getParameter("password");
 
-        if (usuario != null) {
-            usuario = usuario.trim();
-        }
-        if (password != null) {
-            password = password.trim();
-        }
+        if (usuario != null) usuario = usuario.trim();
+        if (password != null) password = password.trim();
 
         try {
             LoginDAO dao = new LoginDAO();
@@ -34,19 +29,14 @@ public class LoginServlet extends HttpServlet {
 
             if (u != null && u.getPassword() != null && u.getPassword().trim().equals(password)) {
                 HttpSession sesion = req.getSession();
-                sesion.setAttribute("id_usuario", u.getId_usuario());
+                sesion.setAttribute("id_usuario", Integer.valueOf(u.getId_usuario()));
                 sesion.setAttribute("usuario", u.getUsuario());
                 sesion.setAttribute("rol", u.getRol());
-
-                BitacoraDAO.registrar(u.getId_usuario(), "Login", "Inicio de sesion",
-                        "El usuario inicio sesion correctamente");
 
                 res.sendRedirect("Vistas/dashboard.jsp");
                 return;
             }
 
-            BitacoraDAO.registrar(null, "Login", "Credenciales incorrectas",
-                    "Intento fallido para el usuario: " + usuario);
             res.sendRedirect("Vistas/login.jsp?error=1");
 
         } catch (Exception e) {
@@ -55,5 +45,3 @@ public class LoginServlet extends HttpServlet {
         }
     }
 }
-
-

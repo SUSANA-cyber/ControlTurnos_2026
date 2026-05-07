@@ -2,6 +2,7 @@ package ModeloDAO;
 
 import Modelo.MSolicitudes;
 import Config.Conexion;
+import Modelo.Bitacora;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
@@ -11,9 +12,7 @@ public class SolicitudDAO {
     private PreparedStatement ps;
 
     public boolean AgregarSolicitud(MSolicitudes sol) {
-        String sql = "INSERT INTO solicitudes "
-                + "(usuario_id, tipo, fecha_inicio, fecha_fin, motivo, estado) "
-                + "VALUES (?, ?, ?, ?, ?, 'Pendiente')";
+        String sql = "INSERT INTO solicitudes (usuario_id, tipo, fecha_inicio, fecha_fin, motivo, estado) VALUES (?, ?, ?, ?, ?, 'PendienteArea')";
 
         try {
             con = Conexion.getConexion();
@@ -25,8 +24,7 @@ public class SolicitudDAO {
             ps.setString(5, sol.getMotivo());
             ps.executeUpdate();
 
-            BitacoraDAO.registrar(sol.getUsuario_id(), "Gestiones del Empleado", "Crear",
-                    "Solicitud enviada: " + sol.getTipo());
+            Bitacora.solicitudes(sol.getUsuario_id(), "Solicitud enviada: " + sol.getTipo());
             return true;
 
         } catch (Exception e) {
@@ -61,5 +59,3 @@ public class SolicitudDAO {
         try { if (con != null) con.close(); } catch (Exception e) {}
     }
 }
-
-

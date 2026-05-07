@@ -2,9 +2,15 @@
 
 <%
 String usuario = (String) session.getAttribute("usuario");
+String rol = (String) session.getAttribute("rol");
 
 if (usuario == null) {
     response.sendRedirect("login.jsp");
+    return;
+}
+
+if (rol == null || !rol.equals("Empleado")) {
+    response.sendRedirect("dashboard.jsp");
     return;
 }
 
@@ -98,7 +104,7 @@ String mensaje = request.getParameter("msj");
             <option value="Vacaciones">Vacaciones</option>
             <option value="PermisoPersonal">Permiso Personal</option>
             <option value="CitaAlIgss">Cita al IGSS</option>
-            <option value="LicenciaDeCumpleaÃ±os">Licencia de Cumple años</option>
+            <option value="LicenciaDeCumpleanos">Licencia de Cumpleaños</option>
             <option value="SuspensionLaboral">Suspension Laboral</option>
             <option value="Otros">Otros</option>
         </select>
@@ -116,15 +122,12 @@ String mensaje = request.getParameter("msj");
 
     <div class="campo">
         <label>Motivo de la Solicitud</label>
-        <textarea name="motivo" rows="4" required
-        placeholder="Explique brevemente el motivo"></textarea>
+        <textarea name="motivo" rows="4" required placeholder="Explique brevemente el motivo"></textarea>
     </div>
 
     <div class="botones">
         <a href="dashboard.jsp">Regresar</a>
-        <button type="submit" name="accion" value="GuardarSolicitud">
-            Guardar
-        </button>
+        <button type="submit" name="accion" value="GuardarSolicitud">Guardar</button>
     </div>
 
 </form>
@@ -132,20 +135,17 @@ String mensaje = request.getParameter("msj");
 </div>
 
 <% if ("exito".equals(mensaje)) { %>
-
 <script>
 Swal.fire({
-    title:'Â¡OperaciÃ³n Exitosa!',
+    title:'Operacion Exitosa',
     text:'Solicitud enviada correctamente.',
     icon:'success',
     confirmButtonText:'Entendido'
 });
 </script>
-
 <% } %>
 
 <% if ("error".equals(mensaje)) { %>
-
 <script>
 Swal.fire({
     title:'Error',
@@ -154,9 +154,7 @@ Swal.fire({
     confirmButtonText:'Aceptar'
 });
 </script>
-
 <% } %>
 
 </body>
 </html>
-

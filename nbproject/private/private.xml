@@ -3,9 +3,40 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos2026_MVC_CORREGIDO_FINAL1123/ControlTurnos2026/src/java/ModeloDAO/TurnoDAO.java</file>
-            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos2026_MVC_CORREGIDO_FINAL1123/ControlTurnos2026/src/java/Config/Conexion.java</file>
-            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos2026_MVC_CORREGIDO_FINAL1123/ControlTurnos2026/src/java/Interfaces/CRUD.java</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/web/Vistas/editarTurno.jsp</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/src/java/Modelo/MSolicitudes.java</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/src/java/controlador/ActualizarTurnoServlet.java</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/src/java/controlador/TurnoServlet.java</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/src/java/ModeloDAO/LoginDAO.java</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/src/java/controlador/UsuarioServlet.java</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/web/Vistas/consultarUsuarios.jsp</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/web/Vistas/gestionRoles.jsp</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/src/java/controlador/MarcajeServlet.java</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/web/Vistas/Solicitudes.jsp</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/src/java/ModeloDAO/AreaDAO.java</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/src/java/Config/ServicioCorreo.java</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/web/Vistas/usuarios.jsp</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/src/java/Modelo/MTurno.java</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/src/java/ModeloDAO/SolicitudDAO.java</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/src/java/controlador/Solicitudes.java</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/src/java/ModeloDAO/MarcajeDAO.java</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/src/java/controlador/CambioDeTurno.java</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/src/java/controlador/RolServlet.java</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/src/java/ModeloDAO/UsuarioDAO.java</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/src/java/Modelo/Usuario.java</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/src/java/controlador/LogoutServlet.java</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/web/Vistas/marcaje.jsp</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/web/Vistas/GstionSolicitudes.jsp</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/web/Vistas/dashboard.jsp</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/src/java/Modelo/Bitacora.java</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/src/java/controlador/GestionAdminServlet.java</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/web/Vistas/turnos.jsp</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/src/java/controlador/LoginServlet.java</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/src/java/ModeloDAO/TurnoDAO.java</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/src/java/Config/Conexion.java</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/src/java/controlador/ConsultarUsuarioServlet.java</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/src/java/controlador/EliminarTurnoServlet.java</file>
+            <file>file:/C:/Users/DANIE/OneDrive/Documentos/NetBeansProjects/ControlTurnos_2026/ControlTurnos2026/src/java/controlador/AreaServlet.java</file>
         </group>
     </open-files>
 </project-private>

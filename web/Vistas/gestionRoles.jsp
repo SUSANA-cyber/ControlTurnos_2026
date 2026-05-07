@@ -73,7 +73,7 @@ String error = request.getParameter("error");
         <label>Usuario</label>
         <input type="text" name="usuario" required>
 
-        <p>Al eliminar el rol, el usuario queda con rol Empleado.</p>
+        <p></p>
         <button class="eliminar" type="submit" name="accion" value="eliminar">Eliminar</button>
     </form>
 

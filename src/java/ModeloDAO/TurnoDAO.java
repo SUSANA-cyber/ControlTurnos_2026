@@ -2,20 +2,44 @@ package ModeloDAO;
 
 import Modelo.MTurno;
 import Config.Conexion;
+import Modelo.Bitacora;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class TurnoDAO {
 
     private Connection con;
     private PreparedStatement ps;
 
+    public boolean empleadoYaTieneTurno(int usuarioId, String fecha) {
+        ResultSet rs = null;
+        try {
+            con = Conexion.getConexion();
+            ps = con.prepareStatement(
+                "SELECT id FROM asignacion_turnos WHERE usuario_id=? AND estado='Activo' AND ? BETWEEN fecha_inicio AND fecha_fin"
+            );
+            ps.setInt(1, usuarioId);
+            ps.setString(2, fecha);
+            rs = ps.executeQuery();
+            return rs.next();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try { if (rs != null) rs.close(); } catch (Exception e) {}
+            cerrar();
+        }
+    }
+
     public boolean CambiarTurno(MTurno mt) {
-        String sql = "INSERT INTO turnos "
-                + "(id_usuario, fecha_inicio, TurnoInicial, NuevoTurno, Nuevafecha, Motivo, estado) "
-                + "VALUES (?, ?, ?, ?, ?, ?, 'Pendiente')";
+        String sql = "INSERT INTO turnos (id_usuario, fecha_inicio, TurnoInicial, NuevoTurno, Nuevafecha, Motivo, estado) VALUES (?, ?, ?, ?, ?, ?, 'Pendiente')";
 
         try {
+            if (empleadoYaTieneTurno(mt.getId_usuario(), mt.getNuevaFecha())) {
+                return false;
+            }
+
             con = Conexion.getConexion();
             ps = con.prepareStatement(sql);
             ps.setInt(1, mt.getId_usuario());
@@ -26,12 +50,11 @@ public class TurnoDAO {
             ps.setString(6, mt.getMotivo());
             ps.executeUpdate();
 
-            BitacoraDAO.registrar(mt.getId_usuario(), "Cambio de Turno", "Crear",
-                    "Solicitud de cambio de turno enviada");
+            Bitacora.solicitudes(mt.getId_usuario(), "Solicitud de cambio de turno enviada");
             return true;
 
         } catch (Exception e) {
-            System.out.println("Error en solicitud: " + e);
+            e.printStackTrace();
             return false;
 
         } finally {
@@ -40,38 +63,29 @@ public class TurnoDAO {
     }
 
     public boolean ActualizarEstado(int id, String nuevoEstado) {
-        String sql = "UPDATE turnos SET estado=? WHERE id=?";
-
         try {
             con = Conexion.getConexion();
-            ps = con.prepareStatement(sql);
+            ps = con.prepareStatement("UPDATE turnos SET estado=? WHERE id=?");
             ps.setString(1, nuevoEstado);
             ps.setInt(2, id);
-            ps.executeUpdate();
-            return true;
-
+            return ps.executeUpdate() > 0;
         } catch (Exception e) {
-            System.out.println("Error al actualizar estado: " + e);
+            e.printStackTrace();
             return false;
-
         } finally {
             cerrar();
         }
     }
 
     public boolean eliminarTurno(int id) {
-        String sql = "DELETE FROM asignacion_turnos WHERE id=?";
-
         try {
             con = Conexion.getConexion();
-            ps = con.prepareStatement(sql);
+            ps = con.prepareStatement("DELETE FROM asignacion_turnos WHERE id=?");
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
-
         } catch (Exception e) {
-            System.out.println("Error al eliminar turno: " + e);
+            e.printStackTrace();
             return false;
-
         } finally {
             cerrar();
         }
@@ -82,5 +96,3 @@ public class TurnoDAO {
         try { if (con != null) con.close(); } catch (Exception e) {}
     }
 }
-
-

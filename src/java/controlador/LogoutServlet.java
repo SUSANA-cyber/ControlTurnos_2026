@@ -1,6 +1,5 @@
 package controlador;
 
-import ModeloDAO.BitacoraDAO;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,14 +16,7 @@ public class LogoutServlet extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession sesion = req.getSession(false);
-
         if (sesion != null) {
-            Integer idUsuario = (Integer) sesion.getAttribute("id_usuario");
-
-            if (idUsuario != null) {
-                BitacoraDAO.registrar(idUsuario, "Login", "Logout", "Cierre de sesion");
-            }
-
             sesion.invalidate();
         }
 

@@ -39,7 +39,7 @@ if (rol == null) {
         }
 
         .menu-box{
-            width:500px;
+            width:520px;
             padding:40px;
             border-radius:20px;
             background:rgba(0,0,0,0.75);
@@ -99,27 +99,21 @@ if (rol == null) {
     </p>
 
     <% if ("AdminRRHH".equals(rol)) { %>
-
-        <a href="<%= request.getContextPath() %>/Vistas/usuarios.jsp" class="menu-btn">Agregar Empleado</a>
-        <a href="<%= request.getContextPath() %>/ConsultarUsuarioServlet" class="menu-btn">Consultar Usuarios</a>
+        <a href="<%= request.getContextPath() %>/Vistas/usuarios.jsp" class="menu-btn">Mantenimiento de Usuario</a>
+        <a href="<%= request.getContextPath() %>/ConsultarUsuarioServlet" class="menu-btn">Consultar Usuario</a>
         <a href="<%= request.getContextPath() %>/Vistas/gestionRoles.jsp" class="menu-btn">Gestion de Roles</a>
         <a href="<%= request.getContextPath() %>/Vistas/GstionSolicitudes.jsp" class="menu-btn">Solicitudes</a>
-
     <% } %>
 
     <% if ("AdminArea".equals(rol)) { %>
-
         <a href="<%= request.getContextPath() %>/Vistas/turnos.jsp" class="menu-btn">Asignacion de Turnos</a>
         <a href="<%= request.getContextPath() %>/Vistas/GstionSolicitudes.jsp" class="menu-btn">Solicitudes</a>
-
     <% } %>
 
     <% if ("Empleado".equals(rol)) { %>
-
         <a href="<%= request.getContextPath() %>/Vistas/marcaje.jsp" class="menu-btn">Marcaje</a>
         <a href="<%= request.getContextPath() %>/Vistas/Solicitudes.jsp" class="menu-btn">Solicitudes</a>
-        <a href="<%= request.getContextPath() %>/Vistas/ActualizarTurno.jsp" class="menu-btn">Cambio De Turno</a>
-
+        <a href="<%= request.getContextPath() %>/Vistas/ActualizarTurno.jsp" class="menu-btn">Cambio de Turno</a>
     <% } %>
 
     <a href="<%= request.getContextPath() %>/LogoutServlet" class="menu-btn logout">
@@ -130,5 +124,3 @@ if (rol == null) {
 
 </body>
 </html>
-
-

@@ -1,7 +1,6 @@
 package controlador;
 
 import ModeloDAO.TurnoDAO;
-import ModeloDAO.BitacoraDAO;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -14,15 +13,10 @@ public class EliminarTurnoServlet extends HttpServlet {
             throws IOException {
 
         try {
-
             int id = Integer.parseInt(req.getParameter("id"));
 
             TurnoDAO dao = new TurnoDAO();
             dao.eliminarTurno(id);
-
-            BitacoraDAO.registrar((Integer) req.getSession().getAttribute("id_usuario"),
-                    "Asignacion de Turnos", "Eliminar",
-                    "Eliminacion de asignacion de turno ID " + id);
 
             res.sendRedirect(req.getContextPath() + "/Vistas/turnos.jsp");
 
@@ -32,5 +26,3 @@ public class EliminarTurnoServlet extends HttpServlet {
         }
     }
 }
-
-

@@ -1,6 +1,5 @@
 package controlador;
 
-import ModeloDAO.BitacoraDAO;
 import Config.Conexion;
 import java.io.IOException;
 import java.sql.Connection;
@@ -29,7 +28,7 @@ public class TurnoServlet extends HttpServlet {
         }
 
         String rol = (String) session.getAttribute("rol");
-        if (rol == null || !rol.equals("AdminArea")) {
+        if (!"AdminArea".equals(rol)) {
             response.sendRedirect("Vistas/dashboard.jsp");
             return;
         }
@@ -41,8 +40,10 @@ public class TurnoServlet extends HttpServlet {
 
         Connection con = null;
         PreparedStatement psVal = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
+        PreparedStatement psHoras = null;
+        PreparedStatement psIns = null;
+        ResultSet rsVal = null;
+        ResultSet rsHoras = null;
 
         try {
             if (fechaInicio.compareTo(fechaFin) > 0) {
@@ -52,31 +53,40 @@ public class TurnoServlet extends HttpServlet {
 
             con = Conexion.getConexion();
 
-            String validar = "SELECT id FROM asignacion_turnos "
-                    + "WHERE usuario_id=? AND fecha_inicio=? AND fecha_fin=?";
-            psVal = con.prepareStatement(validar);
-            psVal.setInt(1, usuarioId);
-            psVal.setString(2, fechaInicio);
-            psVal.setString(3, fechaFin);
-            rs = psVal.executeQuery();
+            psHoras = con.prepareStatement("SELECT horas FROM turnos_catalogo WHERE id=?");
+            psHoras.setInt(1, turnoId);
+            rsHoras = psHoras.executeQuery();
 
-            if (rs.next()) {
-                response.sendRedirect("Vistas/turnos.jsp?error=duplicado");
+            if (rsHoras.next() && rsHoras.getInt("horas") != 8) {
+                response.sendRedirect("Vistas/turnos.jsp?error=horas");
                 return;
             }
 
-            String sql = "INSERT INTO asignacion_turnos "
-                    + "(usuario_id, fecha_inicio, fecha_fin, turno_id) VALUES (?, ?, ?, ?)";
-            ps = con.prepareStatement(sql);
-            ps.setInt(1, usuarioId);
-            ps.setString(2, fechaInicio);
-            ps.setString(3, fechaFin);
-            ps.setInt(4, turnoId);
-            ps.executeUpdate();
+            String validar = "SELECT id FROM asignacion_turnos "
+                    + "WHERE usuario_id=? AND estado='Activo' "
+                    + "AND NOT (? < fecha_inicio OR ? > fecha_fin)";
 
-            BitacoraDAO.registrar((Integer) session.getAttribute("id_usuario"),
-                    "Asignacion de Turnos", "Crear",
-                    "Asignacion de turno al empleado ID " + usuarioId);
+            psVal = con.prepareStatement(validar);
+            psVal.setInt(1, usuarioId);
+            psVal.setString(2, fechaFin);
+            psVal.setString(3, fechaInicio);
+            rsVal = psVal.executeQuery();
+
+            if (rsVal.next()) {
+                response.sendRedirect("Vistas/turnos.jsp?error=asignado");
+                return;
+            }
+
+            psIns = con.prepareStatement(
+                "INSERT INTO asignacion_turnos "
+                + "(usuario_id, fecha_inicio, fecha_fin, turno_id, estado) "
+                + "VALUES (?, ?, ?, ?, 'Activo')"
+            );
+            psIns.setInt(1, usuarioId);
+            psIns.setString(2, fechaInicio);
+            psIns.setString(3, fechaFin);
+            psIns.setInt(4, turnoId);
+            psIns.executeUpdate();
 
             response.sendRedirect("Vistas/turnos.jsp?ok=1");
 
@@ -84,12 +94,12 @@ public class TurnoServlet extends HttpServlet {
             e.printStackTrace();
             response.sendRedirect("Vistas/turnos.jsp?error=2");
         } finally {
-            try { if (rs != null) rs.close(); } catch (Exception e) {}
+            try { if (rsVal != null) rsVal.close(); } catch (Exception e) {}
+            try { if (rsHoras != null) rsHoras.close(); } catch (Exception e) {}
             try { if (psVal != null) psVal.close(); } catch (Exception e) {}
-            try { if (ps != null) ps.close(); } catch (Exception e) {}
+            try { if (psHoras != null) psHoras.close(); } catch (Exception e) {}
+            try { if (psIns != null) psIns.close(); } catch (Exception e) {}
             try { if (con != null) con.close(); } catch (Exception e) {}
         }
     }
 }
-
-

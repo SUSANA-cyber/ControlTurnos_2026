@@ -5,7 +5,10 @@ import ModeloDAO.TurnoDAO;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet("/CambioDeTurno")
 public class CambioDeTurno extends HttpServlet {
@@ -16,16 +19,16 @@ public class CambioDeTurno extends HttpServlet {
 
         request.setCharacterEncoding("UTF-8");
 
-        Integer idLogueado = (Integer) request.getSession().getAttribute("id_usuario");
-
-        if (idLogueado == null) {
+        HttpSession sesion = request.getSession(false);
+        if (sesion == null || sesion.getAttribute("id_usuario") == null) {
             response.sendRedirect("Vistas/login.jsp");
             return;
         }
 
-        MTurno mtu = new MTurno();
+        Integer idLogueado = (Integer) sesion.getAttribute("id_usuario");
 
-        mtu.setId_usuario(idLogueado);
+        MTurno mtu = new MTurno();
+        mtu.setId_usuario(idLogueado.intValue());
         mtu.setFecha_inicio(request.getParameter("FechaInicio"));
         mtu.setTurnoInicial(request.getParameter("InicialTurno"));
         mtu.setNuevoTurno(request.getParameter("NuevoTurno"));
@@ -33,14 +36,12 @@ public class CambioDeTurno extends HttpServlet {
         mtu.setMotivo(request.getParameter("motivo"));
 
         TurnoDAO dao = new TurnoDAO();
-
         boolean exito = dao.CambiarTurno(mtu);
 
         if (exito) {
             response.sendRedirect("Vistas/ActualizarTurno.jsp?msj=exito");
         } else {
-            response.sendRedirect("Vistas/ActualizarTurno.jsp?msj=error");
+            response.sendRedirect("Vistas/ActualizarTurno.jsp?msj=asignado");
         }
     }
 }
-

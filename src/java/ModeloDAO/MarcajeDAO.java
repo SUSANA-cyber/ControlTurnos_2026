@@ -1,6 +1,7 @@
 package ModeloDAO;
 
 import Config.Conexion;
+import Modelo.Bitacora;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,18 +11,21 @@ public class MarcajeDAO {
 
     public String procesarMarcaje(int idUsuario, String accion) {
         Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
             con = Conexion.getConexion();
 
             String sql = "SELECT * FROM marcajes WHERE usuario_id=? AND fecha=CURDATE()";
-            PreparedStatement ps = con.prepareStatement(sql);
+            ps = con.prepareStatement(sql);
             ps.setInt(1, idUsuario);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
 
             boolean existe = rs.next();
             Time ahora = new Time(System.currentTimeMillis());
             String mensaje = "";
+            boolean guardarBitacora = false;
 
             if ("entrada".equals(accion)) {
                 if (existe) {
@@ -37,51 +41,59 @@ public class MarcajeDAO {
                     ps2.executeUpdate();
                     ps2.close();
 
-                    mensaje = ahora.after(Time.valueOf("08:00:00"))
-                            ? "Entrada registrada tarde"
-                            : "Entrada registrada";
+                    if (ahora.after(Time.valueOf("08:00:00"))) {
+                        mensaje = "Entrada registrada tarde";
+                    } else {
+                        mensaje = "Marcaje realizado con exito";
+                    }
+
+                    guardarBitacora = true;
                 }
 
             } else if ("descanso1".equals(accion)) {
                 if (!existe) {
-                    mensaje = "Debe marcar la entrada antes de registrar el descanso";
+                    mensaje = "Debe marcar la entrada antes de registrar el descanso.";
                 } else if (rs.getTime("hora_descanso1") != null) {
                     mensaje = "Ya marco descanso 1";
                 } else {
                     actualizarHora(con, "hora_descanso1", idUsuario, ahora);
                     mensaje = "Descanso 1 registrado";
+                    guardarBitacora = true;
                 }
 
             } else if ("descanso2".equals(accion)) {
                 if (!existe) {
-                    mensaje = "Debe marcar la entrada antes de registrar el descanso";
+                    mensaje = "Debe marcar la entrada antes de registrar el descanso.";
                 } else if (rs.getTime("hora_descanso1") == null) {
-                    mensaje = "Debe marcar el primer descanso antes de registrar el segundo descanso";
+                    mensaje = "Debe marcar el primer descanso antes de registrar el segundo descanso.";
                 } else if (rs.getTime("hora_descanso2") != null) {
                     mensaje = "Ya marco descanso 2";
                 } else {
                     actualizarHora(con, "hora_descanso2", idUsuario, ahora);
                     mensaje = "Descanso 2 registrado";
+                    guardarBitacora = true;
                 }
 
             } else if ("salida".equals(accion)) {
                 if (!existe) {
                     mensaje = "Debe marcar entrada primero";
                 } else if (rs.getTime("hora_descanso1") == null) {
-                    mensaje = "Debe marcar el primer descanso antes de registrar la salida";
+                    mensaje = "Debe marcar el primer descanso antes de registrar la salida.";
                 } else if (rs.getTime("hora_descanso2") == null) {
-                    mensaje = "Debe marcar el segundo descanso antes de registrar la salida";
+                    mensaje = "Debe marcar el segundo descanso antes de registrar la salida.";
                 } else if (rs.getTime("hora_salida") != null) {
                     mensaje = "Ya marco salida";
                 } else {
                     actualizarHora(con, "hora_salida", idUsuario, ahora);
                     mensaje = "Salida registrada";
+                    guardarBitacora = true;
                 }
             }
 
-            rs.close();
-            ps.close();
-            BitacoraDAO.registrar(idUsuario, "Marcaje", accion, mensaje);
+            if (guardarBitacora) {
+                Bitacora.marcajes(idUsuario, mensaje);
+            }
+
             return mensaje;
 
         } catch (Exception e) {
@@ -89,6 +101,8 @@ public class MarcajeDAO {
             return "Error en el sistema";
 
         } finally {
+            try { if (rs != null) rs.close(); } catch (Exception e) {}
+            try { if (ps != null) ps.close(); } catch (Exception e) {}
             try { if (con != null) con.close(); } catch (Exception e) {}
         }
     }
@@ -102,5 +116,3 @@ public class MarcajeDAO {
         ps.close();
     }
 }
-
-
