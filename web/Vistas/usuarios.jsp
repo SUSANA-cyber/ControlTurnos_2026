@@ -113,7 +113,11 @@ ResultSet rsAdmins = null;
         <p class="mensaje-ok">Se creó correctamente</p>
     <% } %>
 
-    <% if (error != null) { %>
+    <% if ("duplicado".equals(error)) { %>
+        <p class="mensaje-error">Error: Ya existe un empleado con ese usuario o DPI</p>
+    <% } else if ("dpi".equals(error)) { %>
+        <p class="mensaje-error">Error: El DPI solo debe contener números</p>
+    <% } else if (error != null) { %>
         <p class="mensaje-error">Error: Ha ocurrido un error al registrar el empleado</p>
     <% } %>
 
@@ -274,7 +278,9 @@ function filtrarAdministradores() {
     var areaTexto = document.getElementById("area_texto");
     var areaId = areaSelect.value;
 
-    areaTexto.value = areaSelect.options[areaSelect.selectedIndex].text;
+    if (areaSelect.selectedIndex >= 0) {
+        areaTexto.value = areaSelect.options[areaSelect.selectedIndex].text;
+    }
 
     adminSelect.value = "";
 

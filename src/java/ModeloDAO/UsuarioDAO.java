@@ -11,6 +11,34 @@ import java.util.List;
 
 public class UsuarioDAO {
 
+    public boolean existeUsuarioODpi(String usuario, String dpi) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = Conexion.getConexion();
+
+            ps = con.prepareStatement(
+                    "SELECT id FROM usuarios WHERE usuario=? OR dpi=?"
+            );
+            ps.setString(1, usuario);
+            ps.setString(2, dpi);
+
+            rs = ps.executeQuery();
+
+            return rs.next();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return true;
+        } finally {
+            try { if (rs != null) rs.close(); } catch (Exception e) {}
+            try { if (ps != null) ps.close(); } catch (Exception e) {}
+            try { if (con != null) con.close(); } catch (Exception e) {}
+        }
+    }
+
     public boolean registrarUsuario(Usuario u) {
         Connection con = null;
         PreparedStatement ps = null;
@@ -20,6 +48,10 @@ public class UsuarioDAO {
             con = Conexion.getConexion();
 
             if (u.getDpi() == null || !u.getDpi().matches("[0-9]+")) {
+                return false;
+            }
+
+            if (existeUsuarioODpi(u.getUsuario(), u.getDpi())) {
                 return false;
             }
 
@@ -49,20 +81,6 @@ public class UsuarioDAO {
                 rs = null;
                 ps = null;
             }
-
-            ps = con.prepareStatement("SELECT id FROM usuarios WHERE usuario=? OR dpi=?");
-            ps.setString(1, u.getUsuario());
-            ps.setString(2, u.getDpi());
-            rs = ps.executeQuery();
-
-            if (rs.next()) {
-                return false;
-            }
-
-            rs.close();
-            ps.close();
-            rs = null;
-            ps = null;
 
             String sql = "INSERT INTO usuarios "
                     + "(dpi, nombre, usuario, area, area_id, puesto, turno_actual_id, correo, password, estado, motivo_inactivo_id, rol_id, admin_responsable_id) "

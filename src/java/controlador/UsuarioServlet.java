@@ -34,8 +34,17 @@ public class UsuarioServlet extends HttpServlet {
         }
 
         String dpi = req.getParameter("dpi");
+        String usuario = req.getParameter("usuario");
+
         if (dpi == null || !dpi.matches("[0-9]+")) {
-            res.sendRedirect("Vistas/usuarios.jsp?error=1");
+            res.sendRedirect("Vistas/usuarios.jsp?error=dpi");
+            return;
+        }
+
+        UsuarioDAO dao = new UsuarioDAO();
+
+        if (dao.existeUsuarioODpi(usuario, dpi)) {
+            res.sendRedirect("Vistas/usuarios.jsp?error=duplicado");
             return;
         }
 
@@ -49,7 +58,7 @@ public class UsuarioServlet extends HttpServlet {
         Usuario u = new Usuario();
         u.setDpi(dpi);
         u.setNombre(req.getParameter("nombre"));
-        u.setUsuario(req.getParameter("usuario"));
+        u.setUsuario(usuario);
         u.setArea_id(parseEnteroObjeto(req.getParameter("area_id")));
         u.setArea(req.getParameter("area_texto"));
         u.setPuesto(req.getParameter("puesto"));
@@ -61,7 +70,6 @@ public class UsuarioServlet extends HttpServlet {
         u.setRol_id(parseEntero(req.getParameter("rol_id"), 3));
         u.setAdmin_responsable_id(parseEnteroObjeto(req.getParameter("admin_responsable_id")));
 
-        UsuarioDAO dao = new UsuarioDAO();
         boolean resultado = dao.registrarUsuario(u);
 
         if (resultado) {
