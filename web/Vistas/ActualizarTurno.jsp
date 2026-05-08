@@ -144,7 +144,7 @@ String mensaje = request.getParameter("msj");
 
 <script>
 Swal.fire({
-    title: 'Â¡OperaciÃ³n Exitosa!',
+    title: Operacion Exitosa!',
     text: 'La solicitud fue enviada correctamente.',
     icon: 'success',
     confirmButtonText: 'Entendido'

@@ -100,7 +100,7 @@ if (rol == null || (!rol.equals("AdminRRHH") && !rol.equals("AdminArea"))) {
 <tr>
     <th>Empleado</th>
     <th>Tipo</th>
-    <th>Detalles / Motivo</th>
+    <th>Desde / Hasta</th> <th>Detalles / Motivo</th>
     <th>Accion</th>
 </tr>
 </thead>
@@ -108,11 +108,16 @@ if (rol == null || (!rol.equals("AdminRRHH") && !rol.equals("AdminArea"))) {
 <tbody>
 
 <%
+
 Connection con = null;
+Integer idAdminLogueado = (Integer) session.getAttribute("id_usuario"); 
 
 try {
     con = Conexion.getConexion();
+    String sqlTurnos = "";
+    String sqlSolicitudes = "";
 
+<<<<<<< HEAD
     String sqlTurnos;
 
     if ("AdminArea".equals(rol)) {
@@ -134,10 +139,32 @@ try {
     if ("AdminArea".equals(rol)) {
         ps1.setInt(1, adminId.intValue());
     }
+=======
+    
+    if (rol.equals("AdminArea")) {
+        
+        sqlTurnos = "SELECT t.*, u.usuario, u.correo FROM turnos t JOIN usuarios u ON t.id_usuario = u.id " +
+                    "WHERE t.estado = 'Pendiente_Area' AND u.admin_responsable_id = ?";
+        
+        sqlSolicitudes = "SELECT s.*, u.usuario, u.correo FROM solicitudes s JOIN usuarios u ON s.usuario_id = u.id " +
+                         "WHERE s.estado = 'Pendiente_Area' AND u.admin_responsable_id = ?";
+    } else {
+       
+        sqlTurnos = "SELECT t.*, u.usuario, u.correo FROM turnos t JOIN usuarios u ON t.id_usuario = u.id " +
+                    "WHERE t.estado = 'Pendiente_RRHH'";
+        
+        sqlSolicitudes = "SELECT s.*, u.usuario, u.correo FROM solicitudes s JOIN usuarios u ON s.usuario_id = u.id " +
+                         "WHERE s.estado = 'Pendiente_RRHH'";
+    }
+
+PreparedStatement ps1 = con.prepareStatement(sqlTurnos);
+    if (rol.equals("AdminArea")) ps1.setInt(1, idAdminLogueado);
+>>>>>>> 1f1b84a (Jerarquia de solicitudes, informacion de las fechas en las solicitudes, conexiones y botones de regresar)
     ResultSet rs1 = ps1.executeQuery();
 
     while (rs1.next()) {
 %>
+<<<<<<< HEAD
 <tr>
 <td><%= rs1.getString("usuario") %> (<%= rs1.getString("correo") %>)</td>
 <td>Cambio de Turno</td>
@@ -158,11 +185,33 @@ Motivo: <%= rs1.getString("Motivo") %>
 </td>
 </tr>
 <%
+=======
+    <tr>
+        <td><%= rs1.getString("usuario") %> (<%= rs1.getString("correo") %>)</td>
+        <td>Cambio de Turno</td>
+        <td style="font-weight: bold; color: #0d6efd;">
+            <%= rs1.getString("fecha_inicio") %> <br> al <%= rs1.getString("Nuevafecha") %>
+        </td>
+        <td>De <%= rs1.getString("TurnoInicial") %> a <%= rs1.getString("NuevoTurno") %><br>
+            Motivo: <%= rs1.getString("Motivo") %></td>
+        <td>
+            <form action="<%= request.getContextPath() %>/GestionAdminServlet" method="POST">
+                <input type="hidden" name="id_solicitud" value="<%= rs1.getInt("id") %>">
+                <input type="hidden" name="correo_empleado" value="<%= rs1.getString("correo") %>">
+                <input type="hidden" name="tipo_tabla" value="turnos">
+                <input type="hidden" name="tipo_solicitud" value="Cambio de Turno">
+                <button class="aprobar" type="submit" name="decision" value="Aprobado">Aprobar</button>
+                <button class="rechazar" type="submit" name="decision" value="Rechazado">Rechazar</button>
+            </form>
+        </td>
+    </tr>
+<% 
+>>>>>>> 1f1b84a (Jerarquia de solicitudes, informacion de las fechas en las solicitudes, conexiones y botones de regresar)
     }
-
     rs1.close();
     ps1.close();
 
+<<<<<<< HEAD
     String sqlSol;
 
     if ("AdminArea".equals(rol)) {
@@ -184,10 +233,15 @@ Motivo: <%= rs1.getString("Motivo") %>
     if ("AdminArea".equals(rol)) {
         ps2.setInt(1, adminId.intValue());
     }
+=======
+    PreparedStatement ps2 = con.prepareStatement(sqlSolicitudes);
+    if (rol.equals("AdminArea")) ps2.setInt(1, idAdminLogueado);
+>>>>>>> 1f1b84a (Jerarquia de solicitudes, informacion de las fechas en las solicitudes, conexiones y botones de regresar)
     ResultSet rs2 = ps2.executeQuery();
 
     while (rs2.next()) {
 %>
+<<<<<<< HEAD
 <tr>
 <td><%= rs2.getString("usuario") %> (<%= rs2.getString("correo") %>)</td>
 <td><%= rs2.getString("tipo") %></td>
@@ -209,6 +263,29 @@ Motivo: <%= rs1.getString("Motivo") %>
     rs2.close();
     ps2.close();
 
+=======
+    <tr>
+        <td><%= rs2.getString("usuario") %> (<%= rs2.getString("correo") %>)</td>
+        <td><%= rs2.getString("tipo") %></td>
+        <td style="font-weight: bold; color: #0d6efd;">
+            <%= rs2.getString("fecha_inicio") %> <br> al <%= rs2.getString("fecha_fin") %>
+        </td>
+        <td><%= rs2.getString("motivo") %></td>
+        <td>
+            <form action="<%= request.getContextPath() %>/GestionAdminServlet" method="POST">
+                <input type="hidden" name="id_solicitud" value="<%= rs2.getInt("id") %>">
+                <input type="hidden" name="correo_empleado" value="<%= rs2.getString("correo") %>">
+                <input type="hidden" name="tipo_tabla" value="solicitudes">
+                <input type="hidden" name="tipo_solicitud" value="<%= rs2.getString("tipo") %>">
+                <button class="aprobar" type="submit" name="decision" value="Aprobado">Aprobar</button>
+                <button class="rechazar" type="submit" name="decision" value="Rechazado">Rechazar</button>
+            </form>
+        </td>
+    </tr>
+<% 
+    } 
+    rs2.close(); ps2.close();
+>>>>>>> 1f1b84a (Jerarquia de solicitudes, informacion de las fechas en las solicitudes, conexiones y botones de regresar)
 } catch (Exception e) {
 %>
 <tr>

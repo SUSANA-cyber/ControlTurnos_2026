@@ -1,5 +1,10 @@
 package controlador;
 
+<<<<<<< HEAD
+=======
+import Config.Conexion;
+import Modelo.Usuario;
+>>>>>>> 1f1b84a (Jerarquia de solicitudes, informacion de las fechas en las solicitudes, conexiones y botones de regresar)
 import Config.ServicioCorreo;
 import Modelo.Usuario;
 import Modelo.Bitacora;
@@ -70,7 +75,17 @@ public class UsuarioServlet extends HttpServlet {
         u.setRol_id(parseEntero(req.getParameter("rol_id"), 3));
         u.setAdmin_responsable_id(parseEnteroObjeto(req.getParameter("admin_responsable_id")));
 
+<<<<<<< HEAD
         boolean resultado = dao.registrarUsuario(u);
+=======
+        UsuarioDAO dao = new UsuarioDAO();
+        boolean resultado = dao.registrarUsuario(
+                u.getDpi(), u.getNombre(), u.getUsuario(), u.getArea(),
+                u.getPuesto(), u.getTurno_actual_id(), u.getCorreo(),
+                u.getPassword(), u.getEstado(), u.getMotivo_inactivo_id(),
+                u.getRol_id()
+        );
+>>>>>>> 1f1b84a (Jerarquia de solicitudes, informacion de las fechas en las solicitudes, conexiones y botones de regresar)
 
         if (resultado) {
             Bitacora.creacionUsuario((Integer) session.getAttribute("id_usuario"),
@@ -80,6 +95,7 @@ public class UsuarioServlet extends HttpServlet {
 
             if ("Inactivo".equals(u.getEstado())) {
                 String motivoTexto = obtenerMotivoInactividad(u.getMotivo_inactivo_id());
+<<<<<<< HEAD
 
                 if (u.getCorreo() != null && !u.getCorreo().trim().isEmpty()) {
                     correoEnviado = ServicioCorreo.enviarEmail(
@@ -98,6 +114,14 @@ public class UsuarioServlet extends HttpServlet {
             } else {
                 res.sendRedirect("Vistas/usuarios.jsp?ok=1&correo=0");
             }
+=======
+                // Lógica de Bitacora y Correo...
+                if (u.getCorreo() != null && !u.getCorreo().trim().isEmpty()) {
+                    ServicioCorreo.enviarEmail(u.getCorreo(), "Notificación", "Hola " + u.getNombre() + "...");
+                }
+            }
+            res.sendRedirect("Vistas/usuarios.jsp?ok=1");
+>>>>>>> 1f1b84a (Jerarquia de solicitudes, informacion de las fechas en las solicitudes, conexiones y botones de regresar)
         } else {
             res.sendRedirect("Vistas/usuarios.jsp?error=1");
         }
@@ -105,6 +129,7 @@ public class UsuarioServlet extends HttpServlet {
 
     private int parseEntero(String valor, int defecto) {
         try {
+<<<<<<< HEAD
             if (valor != null && !valor.trim().isEmpty()) {
                 return Integer.parseInt(valor);
             }
@@ -127,6 +152,16 @@ public class UsuarioServlet extends HttpServlet {
         if (motivoId == null) return "No especificado";
 
         switch (motivoId.intValue()) {
+=======
+            if (valor != null && !valor.isEmpty()) return Integer.parseInt(valor);
+        } catch (NumberFormatException e) {}
+        return defecto;
+    }
+
+    private String obtenerMotivoInactividad(Integer motivoId) {
+        if (motivoId == null) return "No especificado";
+        switch (motivoId) {
+>>>>>>> 1f1b84a (Jerarquia de solicitudes, informacion de las fechas en las solicitudes, conexiones y botones de regresar)
             case 1: return "Vacaciones";
             case 2: return "Permiso Personal";
             case 3: return "Citas al IGSS";

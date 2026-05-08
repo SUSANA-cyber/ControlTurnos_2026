@@ -100,12 +100,19 @@ String mensaje = request.getParameter("msj");
 
     <div class="campo">
         <label>Tipo de Solicitud</label>
-        <select name="Sopciones" required>
+        <select name="tipo_solicitud" required>
             <option value="Vacaciones">Vacaciones</option>
+<<<<<<< HEAD
             <option value="PermisoPersonal">Permiso Personal</option>
             <option value="CitaAlIgss">Cita al IGSS</option>
             <option value="LicenciaDeCumpleanos">Licencia de Cumpleaños</option>
             <option value="SuspensionLaboral">Suspension Laboral</option>
+=======
+            <option value="Permiso Personal">Permiso Personal</option>
+            <option value="Cita Al Igss">Cita al IGSS</option>
+            <option value="Licencia De CumpleaÃ±os">Licencia de Cumple años</option>
+            <option value="Suspension Laboral">Suspension Laboral</option>
+>>>>>>> 1f1b84a (Jerarquia de solicitudes, informacion de las fechas en las solicitudes, conexiones y botones de regresar)
             <option value="Otros">Otros</option>
         </select>
     </div>
@@ -117,7 +124,7 @@ String mensaje = request.getParameter("msj");
 
     <div class="campo">
         <label>Fecha Fin</label>
-        <input type="date" name="FechaFIn" required>
+        <input type="date" name="FechaFin" required>
     </div>
 
     <div class="campo">
@@ -137,7 +144,11 @@ String mensaje = request.getParameter("msj");
 <% if ("exito".equals(mensaje)) { %>
 <script>
 Swal.fire({
+<<<<<<< HEAD
     title:'Operacion Exitosa',
+=======
+    title:'operacion exitosa',
+>>>>>>> 1f1b84a (Jerarquia de solicitudes, informacion de las fechas en las solicitudes, conexiones y botones de regresar)
     text:'Solicitud enviada correctamente.',
     icon:'success',
     confirmButtonText:'Entendido'

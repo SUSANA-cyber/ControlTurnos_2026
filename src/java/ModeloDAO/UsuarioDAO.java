@@ -234,4 +234,36 @@ public class UsuarioDAO {
 
         return roles;
     }
+<<<<<<< HEAD
 }
+=======
+    
+  public boolean inactivarUsuario(int id, int motivoId) {
+    String sql = "UPDATE usuarios SET estado = 'Inactivo', motivo_inactivo_id = ? WHERE id = ?";
+    try (Connection con = Config.Conexion.getConexion(); 
+         PreparedStatement ps = con.prepareStatement(sql)) {
+        ps.setInt(1, motivoId); 
+        ps.setInt(2, id);
+        return ps.executeUpdate() > 0;
+    } catch (Exception e) { e.printStackTrace(); return false; }
+
+}
+  
+  
+  public boolean activarUsuario(int id) {
+    
+    String sql = "UPDATE usuarios SET estado = 'Activo', motivo_inactivo_id = NULL WHERE id = ?";
+    try (Connection con = Config.Conexion.getConexion(); 
+         PreparedStatement ps = con.prepareStatement(sql)) {
+        
+        ps.setInt(1, id);
+        return ps.executeUpdate() > 0;
+    } catch (Exception e) {
+        System.err.println("Error al activar en el DAO: " + e.getMessage());
+        return false;
+    }
+}
+}
+
+
+>>>>>>> 1f1b84a (Jerarquia de solicitudes, informacion de las fechas en las solicitudes, conexiones y botones de regresar)

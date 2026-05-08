@@ -70,7 +70,9 @@ label{
     color:white;
     border:1px solid #00bfff;
 }
+.button a,
 button{
+    display: inline-block; 
     margin-top:15px;
     width:100%;
     border:2px solid #00bfff;
@@ -79,6 +81,9 @@ button{
     padding:10px;
     border-radius:10px;
     font-weight:bold;
+    text-decoration: none; 
+    text-align: center;    
+    box-sizing: border-box;
 }
 button:hover{
     background:#00bfff;
@@ -179,6 +184,8 @@ while(rsTurnos.next()){
 </option>
 <% } %>
 </select>
+ <div class="button">
+    <a href="dashboard.jsp">Regresar</a>
 
 <button type="submit">Guardar</button>
 

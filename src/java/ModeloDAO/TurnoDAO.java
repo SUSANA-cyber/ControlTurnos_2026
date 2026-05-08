@@ -33,7 +33,13 @@ public class TurnoDAO {
     }
 
     public boolean CambiarTurno(MTurno mt) {
+<<<<<<< HEAD
         String sql = "INSERT INTO turnos (id_usuario, fecha_inicio, TurnoInicial, NuevoTurno, Nuevafecha, Motivo, estado) VALUES (?, ?, ?, ?, ?, ?, 'Pendiente')";
+=======
+        String sql = "INSERT INTO turnos "
+            + "(id_usuario, fecha_inicio, TurnoInicial, NuevoTurno, Nuevafecha, Motivo, estado) "
+            + "VALUES (?, ?, ?, ?, ?, ?, 'Pendiente_Area')";
+>>>>>>> 1f1b84a (Jerarquia de solicitudes, informacion de las fechas en las solicitudes, conexiones y botones de regresar)
 
         try {
             if (empleadoYaTieneTurno(mt.getId_usuario(), mt.getNuevaFecha())) {

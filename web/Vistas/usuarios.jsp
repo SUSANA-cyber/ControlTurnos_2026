@@ -125,6 +125,7 @@ ResultSet rsAdmins = null;
         <p class="mensaje-ok">Área creada correctamente</p>
     <% } %>
 
+<<<<<<< HEAD
     <% if (areaerror != null) { %>
         <p class="mensaje-error">Error al crear el área</p>
     <% } %>
@@ -169,12 +170,36 @@ ResultSet rsAdmins = null;
                 }
                 %>
             </select>
+=======
+        <label>DPI</label><br>
+        <input type="text" name="dpi"pattern="\d{13}" 
+               maxlength="13" minlength="13" required><br><br>
+
+        <label>Nombre</label><br>
+        <input type="text" name="nombre"  pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+"required><br><br>
+
+        <label>Usuario</label><br>
+        <input type="text" name="usuario" pattern="^\S+$"required><br><br>
+
+        <label>Area</label><br>
+        <input type="text" name="area"required><br><br>
+
+        <label>Puesto</label><br>
+        <input type="text" name="puesto"required><br><br>
+
+        <label>Correo</label><br>
+        <input type="email" name="correo"required><br><br>
+
+        <label>Contraseña</label><br>
+        <input type="password" name="password"required><br><br>
+>>>>>>> 1f1b84a (Jerarquia de solicitudes, informacion de las fechas en las solicitudes, conexiones y botones de regresar)
 
             <input type="hidden" name="area_texto" id="area_texto">
 
             <label>Puesto</label>
             <input type="text" name="puesto">
 
+<<<<<<< HEAD
             <label>Administrador responsable</label>
             <select name="admin_responsable_id" id="admin_responsable_id">
                 <option value="">Seleccione un administrador</option>
@@ -189,6 +214,9 @@ ResultSet rsAdmins = null;
                         "ORDER BY a.nombre, u.nombre"
                     );
                     rsAdmins = psAdmins.executeQuery();
+=======
+        
+>>>>>>> 1f1b84a (Jerarquia de solicitudes, informacion de las fechas en las solicitudes, conexiones y botones de regresar)
 
                     while (rsAdmins.next()) {
                 %>

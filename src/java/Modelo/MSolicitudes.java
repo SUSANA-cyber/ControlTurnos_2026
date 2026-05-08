@@ -16,7 +16,7 @@ public class MSolicitudes {
    private String fecha_inicio;
    private String fecha_fin;
    private String motivo ;
-   private int estado;
+   private String estado;
    private String tipo_solicitud ;
     
     
@@ -71,11 +71,11 @@ public class MSolicitudes {
         this.motivo = motivo;
     }
 
-    public int getEstado() {
+    public String getEstado() {
         return estado;
     }
 
-    public void setEstado(int estado) {
+    public void setEstado(String estado) {
         this.estado = estado;
     }
 
@@ -86,7 +86,10 @@ public class MSolicitudes {
     public void setTipo_solicitud(String tipo_solicitud) {
         this.tipo_solicitud = tipo_solicitud;
     }
-    
+    private String nombre_empleado; // Para que el admin sepa de quién es la solicitud
+
+public String getNombre_empleado() { return nombre_empleado; }
+public void setNombre_empleado(String nombre_empleado) { this.nombre_empleado = nombre_empleado; }
 }
 
 

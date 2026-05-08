@@ -30,15 +30,21 @@ public class GestionAdminServlet extends HttpServlet {
             response.sendRedirect("Vistas/login.jsp");
             return;
         }
+<<<<<<< HEAD
 
         String rol = (String) session.getAttribute("rol");
         Integer adminId = (Integer) session.getAttribute("id_usuario");
 
+=======
+        
+         
+>>>>>>> 1f1b84a (Jerarquia de solicitudes, informacion de las fechas en las solicitudes, conexiones y botones de regresar)
         int idSolicitud = Integer.parseInt(request.getParameter("id_solicitud"));
         String correoEmpleado = request.getParameter("correo_empleado");
         String tipoTabla = request.getParameter("tipo_tabla");
-        String tipoSolicitud = request.getParameter("tipo_solicitud");
+        String tipo = request.getParameter("tipo_solicitud");
         String decision = request.getParameter("decision");
+<<<<<<< HEAD
         boolean exito = false;
 
         if ("AdminArea".equals(rol)) {
@@ -89,11 +95,56 @@ public class GestionAdminServlet extends HttpServlet {
                 mensaje = "Hola,\n\nTu solicitud de " + tipoSolicitud + " ha sido RECHAZADA.\n\nSaludos,\nSistema ControlTurnos2026";
                 Bitacora.solicitudesRechazadas((Integer) session.getAttribute("id_usuario"), "Solicitud " + tipoSolicitud + " ID " + idSolicitud);
             }
+=======
+        String rol = (String) session.getAttribute("rol");
+        
+        String nuevoEstado = "";
+        boolean esFinal = false;
 
-            if (correoEmpleado != null && !correoEmpleado.trim().isEmpty()) {
-                ServicioCorreo.enviarEmail(correoEmpleado, asunto, mensaje);
+        
+        if ("Aprobado".equals(decision)) {
+            if ("AdminArea".equals(rol)) {
+                nuevoEstado = "Pendiente_RRHH"; 
+            } else if ("AdminRRHH".equals(rol)) {
+                nuevoEstado = "Aprobado"; 
+                esFinal = true;
+            }
+        } else {
+          
+            nuevoEstado = "Rechazado"; 
+            esFinal = true;
+        }
+
+        boolean exito;
+        if ("turnos".equals(tipoTabla)) {
+            TurnoDAO tDao = new TurnoDAO();
+            exito = tDao.ActualizarEstado(idSolicitud, nuevoEstado);
+        } else {
+            SolicitudDAO sDao = new SolicitudDAO();
+            exito = sDao.ActualizarEstado(idSolicitud, nuevoEstado);
+        }
+
+        if (exito) {
+           
+            if (esFinal) {
+                String asunto = "Respuesta final a tu solicitud de " + tipo;
+                String mensaje = "Hola,\n\nTu solicitud de " + tipo
+                        + " ha sido " + nuevoEstado.toUpperCase()
+                        + ".\n\nSaludos,\nSistema ControlTurnos2026";
+>>>>>>> 1f1b84a (Jerarquia de solicitudes, informacion de las fechas en las solicitudes, conexiones y botones de regresar)
+
+                if (correoEmpleado != null && !correoEmpleado.trim().isEmpty()) {
+                    ServicioCorreo.enviarEmail(correoEmpleado, asunto, mensaje);
+                }
             }
 
+<<<<<<< HEAD
+=======
+            BitacoraDAO.registrar((Integer) session.getAttribute("id_usuario"),
+                    "Gestion de Solicitudes", nuevoEstado,
+                    "Solicitud " + tipo + " ID " + idSolicitud + " procesada por " + rol);
+
+>>>>>>> 1f1b84a (Jerarquia de solicitudes, informacion de las fechas en las solicitudes, conexiones y botones de regresar)
             response.sendRedirect("Vistas/GstionSolicitudes.jsp?ok=1");
         } else {
             response.sendRedirect("Vistas/GstionSolicitudes.jsp?error=1");
